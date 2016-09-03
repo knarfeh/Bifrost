@@ -17,6 +17,7 @@ build:
     - openssl x509 -req -in server.csr -CA base.pem -CAkey base.key -CAcreateserial -days 10000 -out server.crt
     - ls
     - ls assets/client/tls/
+    - go version
     - cp base.pem assets/client/tls/ngrokroot.crt
     - make release-server release-client
     - cd ..
