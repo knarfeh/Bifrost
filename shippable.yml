@@ -1,0 +1,29 @@
+build:
+  pre_ci:
+    - docker build -t ci_image:latest -f Dockerfile.ci .
+  pre_ci_boot:
+    image_name: ci_image
+    image_tag: latest
+    pull: false
+    env: NGROK_DOMAIN=ysyou.me
+  ci:
+    - cd ngrok
+    - openssl genrsa -out base.key 2048
+    - openssl req -new -x509 -nodes -key base.key -days 10000 -subj "/CN=$NGROK_DOMAIN" -out base.pem
+    - openssl genrsa -out server.key 2048
+    - openssl req -new -key server.key -subj "/CN=$NGROK_DOMAIN" -out server.csr
+    - openssl x509 -req -in server.csr -CA base.pem -CAkey base.key -CAcreateserial -days 10000 -out server.crt
+    - cp base.pem assets/client/tls/ngrokroot.crt
+    - make release-server release-client
+    - cd ..
+    - cp ngrok/server.key build_context/
+    - cp ngrok/server.crt build_context/
+    - cp ngrok/bin/ngrokd build_context/
+    - cd build_context
+    - docker build -t youyongsong/bifrost:latest -f Dockerfile .
+  on_success:
+    - docker push youyongsong/bifrost:latest
+integrations:
+  hub:
+    - integrationName: docker-registry
+      type: docker
