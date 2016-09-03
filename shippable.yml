@@ -9,7 +9,7 @@ build:
   ci:
     - cd ngrok
     - openssl genrsa -out base.key 2048
-    - printenv | grep $NGROK_DOMAIN
+    - printenv
     - echo "$NGROK_DOMAIN"
     - openssl req -new -x509 -nodes -key base.key -days 10000 -subj "/CN=$NGROK_DOMAIN" -out base.pem
     - openssl genrsa -out server.key 2048
