@@ -25,5 +25,5 @@ build:
     - docker push youyongsong/bifrost:latest
 integrations:
   hub:
-    - integrationName: docker-registry
+    - integrationName: docker_registry
       type: docker
