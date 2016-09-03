@@ -5,7 +5,7 @@ build:
     image_name: ci_image
     image_tag: latest
     pull: false
-    env: NGROK_DOMAIN=ysyou.me
+    options: "-e NGROK_DOMAIN=ysyou.me"
   ci:
     - cd ngrok
     - openssl genrsa -out base.key 2048
