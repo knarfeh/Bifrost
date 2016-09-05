@@ -19,14 +19,14 @@ build:
     - mkdir dist
     - tar zcvf source.tar.gz ngrok && mv source.tar.gz dist
     - cp ngrok/bin/ngrokd . && tar zcvf ngrokd.tar.gz ngrokd && rm ngrokd && mv ngrokd.tar.gz dist
-    - cp ngrok/bin/ngrok . && tar zcvf ngrok_linux.tar.gz ngrok && rm ngrok && mv ngrok_linux.tar.gz dist
+    - cp ngrok/bin/ngrok ./ngrok_linux && tar zcvf ngrok_linux.tar.gz ngrok_linux && rm ngrok_linux && mv ngrok_linux.tar.gz dist
     - cp ngrok/server.key build_context/
     - cp ngrok/server.crt build_context/
     - cp ngrok/bin/ngrokd build_context/
     - cd ngrok
     - GOOS=darwin GOARCH=amd64 make release-client
     - cd ..
-    - cp ngrok/bin/darwin_amd64/ngrok . && tar zcvf ngrok_mac.tar.gz ngrok && rm ngrok && mv ngrok_mac.tar.gz dist
+    - cp ngrok/bin/darwin_amd64/ngrok ./ngrok_mac && tar zcvf ngrok_mac.tar.gz ngrok_mac && rm ngrok_mac && mv ngrok_mac.tar.gz dist
     - cd build_context
     - docker build -t youyongsong/bifrost:latest -f Dockerfile .
     - cd ..
