@@ -15,14 +15,22 @@ build:
     - openssl x509 -req -in server.csr -CA base.pem -CAkey base.key -CAcreateserial -days 10000 -out server.crt
     - cp base.pem assets/client/tls/ngrokroot.crt
     - make release-server release-client
-    - tar zcvf source.tar.gz ngrok
-    - aws s3 cp source.tar s3://bifrost-assets/$NGROK_VERSION/
     - cd ..
+    - mkdir dist
+    - tar zcvf source.tar.gz ngrok && mv source.tar.gz dist
+    - cp ngrok/bin/ngrokd . && tar zcvf ngrokd.tar.gz ngrokd && rm ngrokd && mv ngrokd.tar.gz dist
+    - cp ngrok/bin/ngrok . && tar zcvf ngrok_linux.tar.gz ngrok && rm ngrok && mv ngrok_linux.tar.gz dist
     - cp ngrok/server.key build_context/
     - cp ngrok/server.crt build_context/
     - cp ngrok/bin/ngrokd build_context/
+    - cd ngrok
+    - GOOS=darwin GOARCH=amd64 make release-client
+    - cd ..
+    - cp ngrok/bin/darwin_amd64/ngrok . && tar zcvf ngrok_mac.tar.gz ngrok && rm ngrok && mv ngrok_mac.tar.gz dist
     - cd build_context
     - docker build -t youyongsong/bifrost:latest -f Dockerfile .
+    - cd ..
+    - aws s3 cp dist/ s3://bifrost-assets/$NGROK_VERSION/ --recursive
   on_success:
     - docker push youyongsong/bifrost:latest
 integrations:
