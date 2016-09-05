@@ -20,7 +20,7 @@ build:
     - cp ngrok/server.key build_context/
     - cp ngrok/server.crt build_context/
     - cp ngrok/bin/ngrokd build_context/
-    - aws s3 cp ngrok s3://bifrost-assets/$NGROK_VERSION/
+    - aws s3 cp ngrok s3://bifrost-assets/$NGROK_VERSION/ --recursive
     - cd build_context
     - docker build -t youyongsong/bifrost:latest -f Dockerfile .
   on_success:
