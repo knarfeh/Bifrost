@@ -149,7 +149,7 @@ func Main() {
             json.NewEncoder(w).Encode(domainNames)
         })
         http.ListenAndServe(":8088", nil)
-    }
+    }()
 
 	// ngrok clients
 	tunnelListener(opts.tunnelAddr, tlsConfig)
