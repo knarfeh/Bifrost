@@ -10,6 +10,8 @@ import (
 	"os"
 	"runtime/debug"
 	"time"
+    "encoding/json"
+    "net/http"
 )
 
 const (
@@ -135,6 +137,19 @@ func Main() {
 	if opts.httpsAddr != "" {
 		listeners["https"] = startHttpListener(opts.httpsAddr, tlsConfig)
 	}
+
+    // expose api
+    go func() {
+        http.HandleFunc("/tunnels", func(w http.ResponseWriter, r *http.Request) {
+            tunnels := tunnelRegistry.tunnels
+            domainNames := make([]string, 0, len(tunnels))
+            for domainName := range tunnels {
+                domainNames = append(doaminNames, domainName)
+            }
+            json.NewEncoder(w).Encode(domainNames)
+        })
+        http.ListenAndServe(":8088", nil)
+    }
 
 	// ngrok clients
 	tunnelListener(opts.tunnelAddr, tlsConfig)
