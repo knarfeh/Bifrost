@@ -144,7 +144,7 @@ func Main() {
             tunnels := tunnelRegistry.tunnels
             domainNames := make([]string, 0, len(tunnels))
             for domainName := range tunnels {
-                domainNames = append(doaminNames, domainName)
+                domainNames = append(domainNames, domainName)
             }
             json.NewEncoder(w).Encode(domainNames)
         })
